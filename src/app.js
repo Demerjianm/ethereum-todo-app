@@ -1,7 +1,7 @@
 App = {
   loading: false,
   contracts: {},
-
+  //this calls all the necessary functions on load
   load: async () => {
     //load app...
     console.log('App loading')
@@ -48,11 +48,11 @@ App = {
       )
     }
   },
-
+  //using the web3 api this loads the users account
   loadAccount: async () => {
     App.account = web3.eth.accounts[0]
   },
-
+  //using the truggle framerwork this loads your contracts off the chain
   loadContract: async () => {
     const todoList = await $.getJSON('TodoList.json')
     App.contracts.TodoList = TruffleContract(todoList)
@@ -114,13 +114,21 @@ App = {
     }
   },
 
+  //this creates a to do item
   createTask: async () => {
     App.setLoading(true)
     const content = $('#newTask').val()
     await App.todoList.createTask(content)
     window.location.reload()
   },
-
+  //this toggles the todo item from being completed or not
+  toggleCompleted: async e => {
+    App.setLoading(true)
+    const taskId = e.target.name
+    await App.todoList.toggleCompleted(taskId)
+    window.location.reload()
+  },
+  //this controls the loading state of the app
   setLoading: boolean => {
     App.loading = boolean
     const loader = $('#loader')
